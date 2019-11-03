@@ -33,7 +33,7 @@ public class Main {
         }
 
         tier_1_references = getReferences(tier_1_papers);
-
+        System.out.println(tier_1_references.size() + " tier 3 papers found.");
 
         System.out.println("Beginning tier 2 search.");
 
@@ -44,9 +44,11 @@ public class Main {
             e.printStackTrace();
         }
 
+        tier_2_references = getReferences(tier_2_papers);
+        System.out.println(tier_2_references.size() + " tier 3 papers found.");
+
         System.out.println("Beginning tier 3 search.");
 
-        tier_2_references = getReferences(tier_2_papers);
         resetStatistics();
         try (Stream<String> stream = Files.lines(path)) {
             stream.forEach(Main::parseLineTier3);
