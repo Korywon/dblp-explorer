@@ -23,16 +23,16 @@ public class JsonHelper {
 
     /**
      * Parses an entire text file of JSON objects. This is assuming that each line in the text file is an object.
-     * @param filepath
+     * @param filepath File path of the JSON file.
      * @return Returns an array list of <code>JsonObject</code>s.
      */
     public static ArrayList<JsonObject> parseJsonFile(String filepath) {
         ArrayList<JsonObject> objects = new ArrayList<JsonObject>();
         ArrayList<String> contentLines;
-        contentLines = FileHelper.loadFile("dblp_papers_v11_first_100_lines.txt");
-
+        contentLines = FileHelper.loadFile(filepath);
+        JsonElement element;
         for (int i = 0; i < contentLines.size(); i++) {
-            JsonElement element = JsonHelper.parseJsonString(contentLines.get(i));
+            element = JsonHelper.parseJsonString(contentLines.get(i));
             assert element != null;
             if (element.isJsonObject()) {
                 objects.add(element.getAsJsonObject());
@@ -42,5 +42,14 @@ public class JsonHelper {
         }
 
         return objects;
+    }
+
+    public static JsonObject elementToObject(JsonElement element) {
+        if (element.isJsonObject()) {
+            return element.getAsJsonObject();
+        }
+        else {
+            return null;
+        }
     }
 }
