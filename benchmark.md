@@ -8,7 +8,7 @@ The papers were found using the keyword `intelligence` on `dblp_papers_v11.txt`.
 
 | Tier 	| Time Elapsed 	| Papers Found 	|
 |------	|--------------	|--------------	|
-| 1    	| 256456 ms    	| 11629        	|
+| 1    	| 210860 ms    	| 11629        	|
 | 2    	| 150492 ms    	| 1299         	|
 | 3    	|              	|              	|
 
