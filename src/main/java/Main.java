@@ -23,52 +23,5 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        /*
-        String filepath = CommandListener.promptForInput("Enter filename: ");
-        String keyword = CommandListener.promptForInput("Enter keyword to search: ");
-
-        String regex = ".*" + keyword + ".*";
-
-        try {
-            FileInputStream inputStream = new FileInputStream(filepath);
-            Scanner scanner = new Scanner(inputStream, "UTF-8");
-            String nextLine;
-            JsonObject object;
-            JsonElement element;
-            int counter = 1;
-            long startTime = System.currentTimeMillis();
-            System.out.println("Beginning search...");
-            while (scanner.hasNextLine()) {
-                nextLine = scanner.nextLine();
-                element = JsonHelper.parseJsonString(nextLine);
-                assert element != null;
-                object = JsonHelper.elementToObject(element);
-                if (counter % 100000 == 0) {
-                    System.out.println(counter + " papers scanned. Time elapsed since start: " + ((new Date()).getTime() - startTime) + " ms");
-                }
-                counter++;
-            }
-
-            System.out.println("Finished searching " + counter + " papers. Time elapsed: " + ((new Date()).getTime() - startTime) + " ms");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-
-        /*
-        List<JsonObject> objects = JsonHelper.parseJsonFile("dblp_papers_v11_first_100_lines.txt");
-        System.out.println(objects.size() + " objects parsed from file.");
-
-        for (JsonObject object : objects) {
-            try {
-                if (object.get("title").getAsString().toLowerCase().matches(".*" + keyword + ".*")) {
-                    System.out.println(object.get("title").getAsString());
-                }
-            } catch (Exception e) {
-                System.out.println("Error: Skipping line " + object.toString());
-            }
-        }
-        */
     }
 }
