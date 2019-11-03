@@ -24,43 +24,67 @@ public class Main {
         Path path = Paths.get("dblp_papers_v11.txt");
 
         System.out.println("Beginning tier 1 search.");
-
         resetStatistics();
+
         try (Stream<String> stream = Files.lines(path)) {
             stream.forEach(Main::parseLineTier1);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        tier_1_references = getReferences(tier_1_papers);
-        System.out.println(tier_1_references.size() + " tier 3 papers found.");
+        System.out.println("Finished searching tier 1.");
+        Main.reportStatistics();
 
         System.out.println("Beginning tier 2 search.");
+        Main.resetStatistics();
 
-        resetStatistics();
+        tier_1_references = getReferences(tier_1_papers);
+        System.out.println(tier_1_references.size() + " tier 1 references found.");
+
+        path = Paths.get("dblp_papers_v11.txt");
         try (Stream<String> stream = Files.lines(path)) {
             stream.forEach(Main::parseLineTier2);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        tier_2_references = getReferences(tier_2_papers);
-        System.out.println(tier_2_references.size() + " tier 3 papers found.");
+        System.out.println("Finished searching tier 2.");
+        Main.reportStatistics();
 
         System.out.println("Beginning tier 3 search.");
-
         resetStatistics();
+
+        tier_2_references = getReferences(tier_2_papers);
+        System.out.println(tier_2_references.size() + " tier 2 references found.");
+
+        path = Paths.get("dblp_papers_v11.txt");
+        System.out.println(tier_2_references.size() + " tier 3 references.");
         try (Stream<String> stream = Files.lines(path)) {
             stream.forEach(Main::parseLineTier3);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Main.updateStatistics();
+
+        System.out.println("Finished searching tier 3.");
+        Main.reportStatistics();
+
         System.out.println(lineCount + " papers searched. Time elapsed: " + timeElapsed + " ms");
+
+        Main.printInformation(tier_1_papers, "TIER 1");
+        Main.printInformation(tier_2_papers, "TIER 2");
+        Main.printInformation(tier_3_papers, "TIER 3");
+
+        System.out.println("Final statistics: ");
+        Main.reportStatistics();
     }
 
     public static void parseLineTier1(String line) {
+        Main.updateStatistics();
+        if (lineCount % 100000 == 0) {
+            Main.reportStatistics();
+        }
+
         JsonObject object;
         try {
             object = JsonParser.parseString(line).getAsJsonObject();
@@ -75,14 +99,14 @@ public class Main {
         if (Main.matchLike(object.get("title").getAsString(), Main.keyword)) {
             tier_1_papers.add(object);
         }
+    }
 
+    public static void parseLineTier2(String line) {
         Main.updateStatistics();
         if (lineCount % 100000 == 0) {
             Main.reportStatistics();
         }
-    }
 
-    public static void parseLineTier2(String line) {
         // attempts to parse the line into a JsonObject
         JsonObject object;
         try {
@@ -99,14 +123,14 @@ public class Main {
         if (tier_1_references.contains(object.get("id").getAsString())) {
             tier_2_papers.add(object);
         }
+    }
 
+    public static void parseLineTier3(String line) {
         Main.updateStatistics();
         if (lineCount % 100000 == 0) {
             Main.reportStatistics();
         }
-    }
 
-    public static void parseLineTier3(String line) {
         // attempts to parse the line into a JsonObject
         JsonObject object;
         try {
@@ -123,21 +147,19 @@ public class Main {
         if (tier_2_references.contains(object.get("id").getAsString())) {
             tier_3_papers.add(object);
         }
-
-        Main.updateStatistics();
-        if (lineCount % 100000 == 0) {
-            Main.reportStatistics();
-        }
     }
 
     public static ArrayList<String> getReferences(ArrayList<JsonObject> papers) {
         ArrayList<String> references = new ArrayList<String>();
         for (JsonObject object : papers) {
-            JsonArray array = object.get("references").getAsJsonArray();
-            for (JsonElement element : array) {
-                String referenceId = element.getAsString();
-                references.add(referenceId);
+            try {
+                JsonArray array = object.get("references").getAsJsonArray();
+                for (JsonElement element : array) {
+                    String referenceId = element.getAsString();
+                    references.add(referenceId);
+                }
             }
+            catch (Exception ignored) { }
         }
 
         return references;
@@ -165,5 +187,24 @@ public class Main {
         System.out.println(tier_2_papers.size() + " tier 2 papers indexed.");
         System.out.println(tier_3_papers.size() + " tier 3 papers indexed.");
         System.out.println("Time elapsed since start: " + timeElapsed + " ms\n");
+    }
+
+    private static void printInformation(ArrayList<JsonObject> objectList, String tier) {
+        for (JsonObject object : objectList) {
+            System.out.println(
+                "+ ===== " + tier + " ===== + "  + "\n" +
+                "ID: " + object.get("id").toString() + "\n" +
+                "Title: " + object.get("title").toString() + "\n" +
+                "Authors: "
+            );
+            JsonArray array = object.get("authors").getAsJsonArray();
+            for (JsonElement element : array) {
+                JsonObject author = element.getAsJsonObject();
+                System.out.println("\t" + author.get("name").toString());
+            }
+            System.out.println(
+                "Year: " + object.get("year").toString()
+            );
+        }
     }
 }
