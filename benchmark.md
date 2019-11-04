@@ -9,12 +9,12 @@ The papers were found using the keyword `intelligence` on `dblp_papers_v11.txt`.
 | Tier 	| Time Elapsed 	| Papers Found 	|
 |------	|--------------	|--------------	|
 | 1    	| 210860 ms    	| 11629        	|
-| 2    	| 150492 ms    	| 1299         	|
-| 3    	|              	|              	|
+| 2    	| 7066909 ms    | 62534         |
+| 3    	| n/a           | n/a           |
 
 ## CPU
 
-Ryzen 5 1600
+Ryzen 5 1600 @ 3.4 GHz
 
 | Sensor               	| Minimum     	| Maximum     	|
 |----------------------	|-------------	|-------------	|
@@ -24,7 +24,7 @@ Ryzen 5 1600
 
 ## RAM
 
-16 GB 
+16 GB @ 2600 MHz
 
 | Sensor               	| Minimum  	| Maximum  	|
 |----------------------	|----------	|----------	|
